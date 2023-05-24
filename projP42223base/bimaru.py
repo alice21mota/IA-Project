@@ -2,11 +2,12 @@
 # Devem alterar as classes e funções neste ficheiro de acordo com as instruções do enunciado.
 # Além das funções e classes já definidas, podem acrescentar outras que considerem pertinentes.
 
-# Grupo 00:
-# 00000 Nome1
-# 00000 Nome2
+# Grupo 116:
+# 102500 Alice Mota
+# 102618 Ana Margarida Almeida
 
 import sys
+
 from search import (
     Problem,
     Node,
@@ -54,6 +55,35 @@ class Board:
 
     @staticmethod
     def parse_instance():
+        # instance.rows
+        # instance.cols 
+        instance = Board()
+        instance.board = [["-" for _ in range(11)] for _ in range(11)]
+
+        from sys import stdin
+        values = stdin.readline().lstrip("ROW\t").split('\t')
+        instance.rows = [int(value) for value in values]
+
+
+        values = stdin.readline().lstrip("COLUMN\t").split('\t')
+        instance.cols = [int(value) for value in values]
+
+        n_hints = int(stdin.readline().rstrip())
+
+        for i in range(n_hints):
+            hint = stdin.readline().lstrip("HINT\t").split('\t')
+            #hints = [int(h) for h in hint]
+            print(hint[0])
+            #print(hint[0])
+            print(hint[1])
+            print(hint[2].rstrip())
+            instance.board[int(hint[0])][int(hint[1])] = hint[2].rstrip()
+        
+        #print(values)
+        
+        return instance
+   
+
         """Lê o test do standard input (stdin) que é passado como argumento
         e retorna uma instância da classe Board.
 
@@ -106,6 +136,10 @@ class Bimaru(Problem):
 
 if __name__ == "__main__":
     # TODO:
+    instance = Board.parse_instance()
+    print(instance.rows)
+    print(instance.cols)
+    print(instance.board)
     # Ler o ficheiro do standard input,
     # Usar uma técnica de procura para resolver a instância,
     # Retirar a solução a partir do nó resultante,
