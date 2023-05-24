@@ -37,6 +37,7 @@ class Board:
     """Representação interna de um tabuleiro de Bimaru."""
 
     def get_value(self, row: int, col: int) -> str:
+        return self.board[row][col]
         """Devolve o valor na respetiva posição do tabuleiro."""
         # TODO
         pass
@@ -44,12 +45,29 @@ class Board:
     def adjacent_vertical_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente acima e abaixo,
         respectivamente."""
+
+        if row == 0:
+            return self.board[row + 1][col]
+        elif row == 9:
+            return self.board[row - 1][col]
+        else:
+            up_val = self.board[row - 1][col]
+            down_val = self.board[row + 1][col]
+            return up_val, down_val
         # TODO
         pass
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
         respectivamente."""
+        if col == 0:
+            return self.board[row][col + 1]
+        elif col == 9:
+            return self.board[row][col - 1]
+        else:
+            left_val = self.board[row][col - 1]
+            right_val = self.board[row][col + 1]
+            return left_val, right_val
         # TODO
         pass
 
@@ -139,7 +157,12 @@ if __name__ == "__main__":
     instance = Board.parse_instance()
     print(instance.rows)
     print(instance.cols)
-    print(instance.board)
+    for j in range(10):
+        print(instance.board[j])
+
+    print(instance.get_value(0, 0))
+    #print(instance.adjacent_vertical_values(9,5))
+    print(instance.adjacent_horizontal_values(0,0))
     # Ler o ficheiro do standard input,
     # Usar uma técnica de procura para resolver a instância,
     # Retirar a solução a partir do nó resultante,
