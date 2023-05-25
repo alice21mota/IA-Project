@@ -227,6 +227,7 @@ class Board:
 
         for i in range(11):
             instance.board[i][10] = 'w'
+            instance.board[10][i] = 'w'
 
         from sys import stdin
         values = stdin.readline().lstrip("ROW\t").split('\t')
