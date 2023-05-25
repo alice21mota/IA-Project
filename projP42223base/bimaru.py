@@ -39,7 +39,26 @@ class Board:
     def place_water(self, row: int, col: int):
         """Coloca àgua na célula dada"""
         self.board[row][col] = "w"
-
+    
+    def place_top(self, row: int, col: int):
+        self.board[row][col] = "t"
+    
+    def place_middle(self, row: int, col: int):
+        self.board[row][col] = "m"
+    
+    def place_bottom(self, row: int, col: int):
+        self.board[row][col] = "b"
+    
+    def place_right(self, row: int, col: int):
+        self.board[row][col] = "r"
+    
+    def place_left(self, row: int, col: int):
+        self.board[row][col] = "l"
+    
+    def place_circle(self, row: int, col: int):
+        self.board[row][col] = "c"
+    
+    
     def clean_t(self, row: int, col: int):
         self.place_water(row-1, col-1)
         self.place_water(row-1, col)
@@ -203,6 +222,71 @@ class Board:
             right = self.board[row][col + 1]
 
         return left, right
+    
+    def is_clear(self, row: int, col: int):
+        """Devolve true se for um espaço em branco, false se estiver
+        preenchido"""
+        return self.board[row][col] == None
+
+    
+    def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
+        
+        def set_size1():
+            self.place_circle(row, col)
+
+        def set_size2():
+            if is_horizontal == True:
+                if self.is_clear(row, col) == True:
+                    self.place_left(row, col)
+                if self.is_clear(row, col+1) == True:
+                    self.place_right(row, col)
+            else:
+                if self.is_clear(row, col) == True:
+                    self.place_top(row, col)
+                if self.is_clear(row+1, col) == True:
+                    self.place_bottom(row, col)
+        
+        def set_size3():
+            if is_horizontal == True:
+                if self.is_clear(row, col) == True:
+                    self.place_left(row, col)
+                if self.is_clear(row, col+1) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row, col+2) == True:
+                    self.place_left(row, col)
+            else:
+                if self.is_clear(row, col) == True:
+                    self.place_top(row, col)
+                if self.is_clear(row+1, col) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row+2, col) == True:
+                    self.place_bottom(row, col)
+        
+        def set_size4():
+            if is_horizontal == True:
+                if self.is_clear(row, col) == True:
+                    self.place_left(row, col)
+                if self.is_clear(row, col+1) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row, col+2) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row, col+3) == True:
+                    self.place_left(row, col)
+            else:
+                if self.is_clear(row, col) == True:
+                    self.place_top(row, col)
+                if self.is_clear(row+1, col) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row+2, col) == True:
+                    self.place_middle(row, col)
+                if self.is_clear(row+3, col) == True:
+                    self.place_bottom(row, col)
+        
+        if size == 1: set_size1()
+        elif size == 2: set_size2()
+        elif size == 3: set_size3()
+        else: set_size4()
+    
 
     @staticmethod
     def parse_instance():
@@ -279,6 +363,8 @@ class Bimaru(Problem):
         'state' passado como argumento. A ação a executar deve ser uma
         das presentes na lista obtida pela execução de
         self.actions(state)."""
+        (row,col,size,is_horizontal) = action
+        return BimaruState(state.board.set_boat(row,col,size,is_horizontal))
         # TODO
         pass
 
