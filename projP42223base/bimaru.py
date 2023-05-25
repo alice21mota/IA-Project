@@ -105,15 +105,11 @@ class Board:
         self.place_water(row-1, col-1)
         self.place_water(row-1, col)
         self.place_water(row-1, col+1)
-        self.place_water(row, col +1)
+        self.place_water(row, col+1)
         self.place_water(row+1, col-2)
         self.place_water(row+1, col-1)
         self.place_water(row+1, col)
         self.place_water(row+1, col+1)
-
-        # todo
-        pass
-
     def clean_cell(self, row: int, col: int, type: str):
         # FIXME não sei se é mais eficiente passar o tipo ou calcular o tipo aqui
         """Coloca àgua à volta da célula recebida"""
@@ -129,7 +125,7 @@ class Board:
             self.clean_l(row, col)
         elif (type == "r"):
             self.clean_r(row, col)
-        elif(type == "m"):
+        elif (type == "m"):
             self.clean_m(row, col)
 
     def clean_row(self, row: int):
@@ -224,6 +220,7 @@ class Board:
         instance = Board()
         # FIXME: pôr àgua nas linhas a mais
         instance.board = [[None for _ in range(11)] for _ in range(11)]
+        instance.boats = [10, 4, 3, 2, 1]
 
         for i in range(11):
             instance.board[i][10] = 'w'
@@ -238,6 +235,7 @@ class Board:
 
         n_hints = int(stdin.readline().rstrip())
 
+        instance.hints = []
         for i in range(n_hints):
             hint = stdin.readline().lstrip("HINT\t").split('\t')
             # hints = [int(h) for h in hint]
@@ -252,6 +250,7 @@ class Board:
             if (type != "W"):
                 print("hint = ", type)
                 instance.reduceValues(row, col)
+            instance.hints.append((row, col))
 
         instance.clean_board()
 
@@ -271,7 +270,8 @@ class Bimaru(Problem):
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
         partir do estado passado como argumento."""
-        # TODO
+        # TODO -> se houver hints por explorar, vemos as hints
+        # return [(row,col,size,ishorizontal:true)]
         pass
 
     def result(self, state: BimaruState, action):
@@ -286,7 +286,7 @@ class Bimaru(Problem):
         """Retorna True se e só se o estado passado como argumento é
         um estado objetivo. Deve verificar se todas as posições do tabuleiro
         estão preenchidas de acordo com as regras do problema."""
-        # TODO
+        # TODO -> ver se todos os barcos estão a 0
         pass
 
     def h(self, node: Node):
@@ -309,6 +309,7 @@ if __name__ == "__main__":
     print(instance.get_value(0, 0))
     # print(instance.adjacent_vertical_values(9,5))
     print(instance.adjacent_horizontal_values(0, 0))
+    print(instance.hints)
     # Ler o ficheiro do standard input,
     # Usar uma técnica de procura para resolver a instância,
     # Retirar a solução a partir do nó resultante,
