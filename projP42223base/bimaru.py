@@ -50,6 +50,8 @@ class Board:
         self.place_water(row+1, col-1)
         # desnecessarias porque depois há repeticao
         self.place_water(row+1, col+1)
+        self.place_water(row+2, col-1)
+        self.place_water(row+2, col+1)
 
     def clean_c(self, row: int, col: int):
         self.place_water(row-1, col-1)
@@ -62,6 +64,10 @@ class Board:
         self.place_water(row+1, col+1)
 
     def clean_m(self, row: int, col: int):
+        self.place_water(row-1, col-1)
+        self.place_water(row-1, col+1)
+        self.place_water(row+1, col-1)
+        self.place_water(row+1, col+1)
         # nao sei se esta funcao faz sentido sequer
         # diria que ela não existe e mantem se as "repeticoes"
         # todo
@@ -77,6 +83,8 @@ class Board:
         self.place_water(row-1, col-1)
         # desnecessarias porque depois há repeticao
         self.place_water(row-1, col+1)
+        self.place_water(row-2, col-1)
+        self.place_water(row-2, col+1)
 
     def clean_l(self, row: int, col: int):
         self.place_water(row-1, col-1)
@@ -88,9 +96,21 @@ class Board:
         self.place_water(row+1, col-1)
         # desnecessarias porque depois há repeticao
         self.place_water(row+1, col+1)
+        self.place_water(row-1, col+2)
+        self.place_water(row+1, col+2)
         pass
 
     def clean_r(self, row: int, col: int):
+        self.place_water(row-1, col-2)
+        self.place_water(row-1, col-1)
+        self.place_water(row-1, col)
+        self.place_water(row-1, col+1)
+        self.place_water(row, col +1)
+        self.place_water(row+1, col-2)
+        self.place_water(row+1, col-1)
+        self.place_water(row+1, col)
+        self.place_water(row+1, col+1)
+
         # todo
         pass
 
@@ -109,6 +129,8 @@ class Board:
             self.clean_l(row, col)
         elif (type == "r"):
             self.clean_r(row, col)
+        elif(type == "m"):
+            self.clean_m(row, col)
 
     def clean_row(self, row: int):
         """Preenche os espaços vazios da linha com àgua"""
@@ -202,6 +224,9 @@ class Board:
         instance = Board()
         # FIXME: pôr àgua nas linhas a mais
         instance.board = [[None for _ in range(11)] for _ in range(11)]
+
+        for i in range(11):
+            instance.board[i][10] = 'w'
 
         from sys import stdin
         values = stdin.readline().lstrip("ROW\t").split('\t')
