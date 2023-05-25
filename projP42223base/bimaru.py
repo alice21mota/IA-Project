@@ -91,8 +91,15 @@ class Board:
         pass
 
     def clean_r(self, row: int, col: int):
-        # todo
-        pass
+        self.place_water(row+1, col-1)
+        self.place_water(row+1, col)
+        self.place_water(row+1, col+1)
+        self.place_water(row, col-1)
+        self.place_water(row, col+1)
+        # FIXME: não sei se estas duas linhas sao
+        self.place_water(row-1, col-1)
+        # desnecessarias porque depois há repeticao
+        self.place_water(row-1, col+1)
 
     def clean_cell(self, row: int, col: int, type: str):
         # FIXME não sei se é mais eficiente passar o tipo ou calcular o tipo aqui
