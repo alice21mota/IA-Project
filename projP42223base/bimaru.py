@@ -205,6 +205,11 @@ class Board:
             down = self.board[row + 1][col]
 
         return up, down
+<<<<<<< Updated upstream
+=======
+        # TODO
+        pass
+>>>>>>> Stashed changes
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
@@ -213,16 +218,25 @@ class Board:
         if col == 0:
             left = None
             right = self.board[row][col + 1]
+<<<<<<< Updated upstream
 
         elif col == 9:
             left = self.board[row][col - 1]
             right = None
 
+=======
+        
+        elif col == 0:
+            left = self.board[row][col - 1]
+            right = None
+        
+>>>>>>> Stashed changes
         else:
             left = self.board[row][col - 1]
             right = self.board[row][col + 1]
 
         return left, right
+<<<<<<< Updated upstream
     
     def is_clear(self, row: int, col: int):
         """Devolve true se for um espaço em branco, false se estiver
@@ -292,9 +306,45 @@ class Board:
 
         return new_board
     
+=======
+        # TODO
+        pass
+>>>>>>> Stashed changes
+
+    #def place_dots(self, h_row: int, h_col: int, h_sym: str):
+      #  if h_sym == 'W': self.board[h_row][h_col] = h_sym
+     #   else:
+            
+
+
 
     @staticmethod
     def parse_instance():
+<<<<<<< Updated upstream
+=======
+        # instance.rows
+        # instance.cols 
+        instance = Board()
+        instance.board = [[None for _ in range(11)] for _ in range(11)]
+
+        from sys import stdin
+        values = stdin.readline().lstrip("ROW\t").split('\t')
+        instance.rows = [int(value) for value in values]
+
+
+        values = stdin.readline().lstrip("COLUMN\t").split('\t')
+        instance.cols = [int(value) for value in values]
+
+        n_hints = int(stdin.readline().rstrip())
+
+        for i in range(n_hints):
+            hint = stdin.readline().lstrip("HINT\t").split('\t')
+            instance.board[int(hint[0])][int(hint[1])] = hint[2].rstrip()
+        
+        return instance
+   
+
+>>>>>>> Stashed changes
         """Lê o test do standard input (stdin) que é passado como argumento
         e retorna uma instância da classe Board.
 
@@ -391,16 +441,21 @@ class Bimaru(Problem):
 if __name__ == "__main__":
     # TODO:
     instance = Board.parse_instance()
-    print(instance.rows)
-    print(instance.cols)
+    #print(instance.rows)
+    #print(instance.cols)
+    print("\n")
     for j in range(10):
 
         print(instance.rows[j], " ", instance.board[j])
 
     print(instance.get_value(0, 0))
+<<<<<<< Updated upstream
     # print(instance.adjacent_vertical_values(9,5))
     print(instance.adjacent_horizontal_values(0, 0))
     print(instance.hints)
+=======
+    print(instance.adjacent_vertical_values(9,5))
+>>>>>>> Stashed changes
     # Ler o ficheiro do standard input,
     # Usar uma técnica de procura para resolver a instância,
     # Retirar a solução a partir do nó resultante,
