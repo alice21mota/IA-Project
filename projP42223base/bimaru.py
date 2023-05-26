@@ -129,6 +129,7 @@ class Board:
         self.place_water(row+1, col-1)
         self.place_water(row+1, col)
         self.place_water(row+1, col+1)
+
     def clean_cell(self, row: int, col: int, type: str):
         # FIXME não sei se é mais eficiente passar o tipo ou calcular o tipo aqui
         """Coloca àgua à volta da célula recebida"""
@@ -230,62 +231,66 @@ class Board:
 
     
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
+        new_board = Board()
+        new_board = self
         
         def set_size1():
-            self.place_circle(row, col)
+            new_board.place_circle(row, col)
 
         def set_size2():
-            if is_horizontal == True:
-                if self.is_clear(row, col) == True:
-                    self.place_left(row, col)
-                if self.is_clear(row, col+1) == True:
-                    self.place_right(row, col)
+            if is_horizontal:
+                if new_board.is_clear(row, col):
+                    new_board.place_left(row, col)
+                if new_board.is_clear(row, col+1):
+                    new_board.place_right(row, col)
             else:
-                if self.is_clear(row, col) == True:
-                    self.place_top(row, col)
-                if self.is_clear(row+1, col) == True:
-                    self.place_bottom(row, col)
+                if new_board.is_clear(row, col):
+                    new_board.place_top(row, col)
+                if new_board.is_clear(row+1, col):
+                    new_board.place_bottom(row, col)
         
         def set_size3():
-            if is_horizontal == True:
-                if self.is_clear(row, col) == True:
-                    self.place_left(row, col)
-                if self.is_clear(row, col+1) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row, col+2) == True:
-                    self.place_left(row, col)
+            if is_horizontal:
+                if new_board.is_clear(row, col):
+                    new_board.place_left(row, col)
+                if new_board.is_clear(row, col+1):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row, col+2):
+                    new_board.place_left(row, col)
             else:
-                if self.is_clear(row, col) == True:
-                    self.place_top(row, col)
-                if self.is_clear(row+1, col) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row+2, col) == True:
-                    self.place_bottom(row, col)
+                if new_board.is_clear(row, col):
+                    new_board.place_top(row, col)
+                if new_board.is_clear(row+1, col):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row+2, col):
+                    new_board.place_bottom(row, col)
         
         def set_size4():
-            if is_horizontal == True:
-                if self.is_clear(row, col) == True:
-                    self.place_left(row, col)
-                if self.is_clear(row, col+1) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row, col+2) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row, col+3) == True:
-                    self.place_left(row, col)
+            if is_horizontal:
+                if new_board.is_clear(row, col):
+                    new_board.place_left(row, col)
+                if new_board.is_clear(row, col+1):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row, col+2):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row, col+3):
+                    new_board.place_left(row, col)
             else:
-                if self.is_clear(row, col) == True:
-                    self.place_top(row, col)
-                if self.is_clear(row+1, col) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row+2, col) == True:
-                    self.place_middle(row, col)
-                if self.is_clear(row+3, col) == True:
-                    self.place_bottom(row, col)
+                if new_board.is_clear(row, col):
+                    new_board.place_top(row, col)
+                if new_board.is_clear(row+1, col):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row+2, col):
+                    new_board.place_middle(row, col)
+                if new_board.is_clear(row+3, col):
+                    new_board.place_bottom(row, col)
         
         if size == 1: set_size1()
         elif size == 2: set_size2()
         elif size == 3: set_size3()
         else: set_size4()
+
+        return new_board
     
 
     @staticmethod
