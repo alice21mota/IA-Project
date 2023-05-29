@@ -36,29 +36,41 @@ class BimaruState:
 class Board:
     """Representação interna de um tabuleiro de Bimaru."""
 
+    def print(self):
+        """Mostrar o estado do board"""
+        print("Board:")
+        for i in range(10):
+            for j in range(10):
+                print(self.board[i][j]
+                      if self.board[i][j] is not None else ".", end=" "
+                      )
+            print(self.rows[i])
+        print(self.cols)
+        print("Barcos por colocar = ", self.boats)
+        print("Dicas por explorar = ", self.hints)
+
     def place_water(self, row: int, col: int):
         """Coloca àgua na célula dada"""
         self.board[row][col] = "w"
-    
+
     def place_top(self, row: int, col: int):
         self.board[row][col] = "t"
-    
+
     def place_middle(self, row: int, col: int):
         self.board[row][col] = "m"
-    
+
     def place_bottom(self, row: int, col: int):
         self.board[row][col] = "b"
-    
+
     def place_right(self, row: int, col: int):
         self.board[row][col] = "r"
-    
+
     def place_left(self, row: int, col: int):
         self.board[row][col] = "l"
-    
+
     def place_circle(self, row: int, col: int):
         self.board[row][col] = "c"
-    
-    
+
     def clean_t(self, row: int, col: int):
         self.place_water(row-1, col-1)
         self.place_water(row-1, col)
@@ -134,7 +146,6 @@ class Board:
         # FIXME não sei se é mais eficiente passar o tipo ou calcular o tipo aqui
         """Coloca àgua à volta da célula recebida"""
         type = type.lower()
-        print("type = ", type)
         if (type == "t"):
             self.clean_t(row, col)
         elif (type == "b"):
@@ -180,7 +191,7 @@ class Board:
         self.rows[row] -= 1
         if (self.rows[row] == 0):
             self.clean_row(row)
-        self.cols[row] -= 1
+        self.cols[col] -= 1
         if (self.cols[row] == 0):
             self.clean_col(col)
 
@@ -205,11 +216,6 @@ class Board:
             down = self.board[row + 1][col]
 
         return up, down
-<<<<<<< Updated upstream
-=======
-        # TODO
-        pass
->>>>>>> Stashed changes
 
     def adjacent_horizontal_values(self, row: int, col: int) -> (str, str):
         """Devolve os valores imediatamente à esquerda e à direita,
@@ -218,36 +224,26 @@ class Board:
         if col == 0:
             left = None
             right = self.board[row][col + 1]
-<<<<<<< Updated upstream
 
         elif col == 9:
             left = self.board[row][col - 1]
             right = None
 
-=======
-        
-        elif col == 0:
-            left = self.board[row][col - 1]
-            right = None
-        
->>>>>>> Stashed changes
         else:
             left = self.board[row][col - 1]
             right = self.board[row][col + 1]
 
         return left, right
-<<<<<<< Updated upstream
-    
+
     def is_clear(self, row: int, col: int):
         """Devolve true se for um espaço em branco, false se estiver
         preenchido"""
         return self.board[row][col] == None
 
-    
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
         new_board = Board()
         new_board = self
-        
+
         def set_size1():
             new_board.place_circle(row, col)
 
@@ -262,7 +258,7 @@ class Board:
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
                     new_board.place_bottom(row, col)
-        
+
         def set_size3():
             if is_horizontal:
                 if new_board.is_clear(row, col):
@@ -278,7 +274,7 @@ class Board:
                     new_board.place_middle(row, col)
                 if new_board.is_clear(row+2, col):
                     new_board.place_bottom(row, col)
-        
+
         def set_size4():
             if is_horizontal:
                 if new_board.is_clear(row, col):
@@ -298,53 +294,24 @@ class Board:
                     new_board.place_middle(row, col)
                 if new_board.is_clear(row+3, col):
                     new_board.place_bottom(row, col)
-        
-        if size == 1: set_size1()
-        elif size == 2: set_size2()
-        elif size == 3: set_size3()
-        else: set_size4()
+
+        if size == 1:
+            set_size1()
+        elif size == 2:
+            set_size2()
+        elif size == 3:
+            set_size3()
+        else:
+            set_size4()
 
         return new_board
-    
-=======
-        # TODO
-        pass
->>>>>>> Stashed changes
 
-    #def place_dots(self, h_row: int, h_col: int, h_sym: str):
+    # def place_dots(self, h_row: int, h_col: int, h_sym: str):
       #  if h_sym == 'W': self.board[h_row][h_col] = h_sym
      #   else:
-            
-
-
 
     @staticmethod
     def parse_instance():
-<<<<<<< Updated upstream
-=======
-        # instance.rows
-        # instance.cols 
-        instance = Board()
-        instance.board = [[None for _ in range(11)] for _ in range(11)]
-
-        from sys import stdin
-        values = stdin.readline().lstrip("ROW\t").split('\t')
-        instance.rows = [int(value) for value in values]
-
-
-        values = stdin.readline().lstrip("COLUMN\t").split('\t')
-        instance.cols = [int(value) for value in values]
-
-        n_hints = int(stdin.readline().rstrip())
-
-        for i in range(n_hints):
-            hint = stdin.readline().lstrip("HINT\t").split('\t')
-            instance.board[int(hint[0])][int(hint[1])] = hint[2].rstrip()
-        
-        return instance
-   
-
->>>>>>> Stashed changes
         """Lê o test do standard input (stdin) que é passado como argumento
         e retorna uma instância da classe Board.
 
@@ -382,21 +349,81 @@ class Board:
             col = int(hint[1])
             type = hint[2].rstrip()
             print(row)
-            print(col)
+            print("col = ", col)
             print(type)
             instance.board[row][col] = type
             instance.clean_cell(row, col, type)
             if (type != "W"):
                 print("hint = ", type)
                 instance.reduceValues(row, col)
-            instance.hints.append((row, col))
+                if (type != "C"):
+                    instance.hints.append((row, col))
+                else:
+                    instance.boats[0] -= 1
+                    instance.boats[1] -= 1
 
         instance.clean_board()
+        # TODO: verificar se já há barcos preenchidos
+
+        # TODO: acho que devemos preencher aquilo que já se pode
 
         # print(values)
 
         return instance
 
+    def isValidPosition(self, row, col, type):
+        print("isValidPosition")
+        # type must be in ["H"(horizontal), "V"(vertical), "C"(center)]
+        if self.get_value(row, col) != None:
+            return false
+        if self.rows[row] < 1:
+            return False
+        if self.cols[col] < 1:
+            return False
+
+        # not sure se isto é a maneira mais eficiente
+        vizinhos_permitidos = ['W', None, "w"]
+        valid = True
+
+        # TODO check if é mesmo necessario explorar diagonais
+
+        # verificar diagonais
+        valid = self.get_value(row - 1, col - 1) in vizinhos_permitidos
+        valid = self.get_value(row - 1, col + 1) in vizinhos_permitidos
+        valid = self.get_value(row + 1, col - 1) in vizinhos_permitidos
+        valid = self.get_value(row + 1, col + 1) in vizinhos_permitidos
+        if not valid:
+            return False
+
+        # se não vertical (horizontal or center), verificar cima e baixo
+        if type != "V":
+            valid = self.get_value(row - 1, col) in vizinhos_permitidos
+            valid = self.get_value(row + 1, col) in vizinhos_permitidos
+        # se não horizontal (vertical or center), verificar direita e esquerda
+        if type != "H":
+            valid = self.get_value(row, col-1) in vizinhos_permitidos
+            valid = self.get_value(row, col+1) in vizinhos_permitidos
+        return valid
+
+    def getActionsT(self, row, col):
+        validActions = []
+        for size in range(2, 5):
+            print(size)
+            if (self.cols[col] < size - 1 or self.rows[row+size-1] < 1 or not self.isValidPosition(row+size-1, col, "V")):
+                break
+            if self.boats[size] < 1:
+                # já foram colocados todos os barcos deste tamanho
+                continue
+            validActions.append((row, col, size, False))
+        print("getActionsT = ", validActions)
+
+    def getVerticalActions(self, row, col, type):
+        print("vertical actions", type)
+        if type == "t":
+            return self.getActionsT(row, col)
+
+    def getHorizontalActions(self, row, col, type):
+        pass
     # TODO: outros metodos da classe
 
 
@@ -404,6 +431,7 @@ class Bimaru(Problem):
     def __init__(self, board: Board):
         """O construtor especifica o estado inicial."""
         # TODO
+        self.problem = board
         pass
 
     def actions(self, state: BimaruState):
@@ -411,6 +439,22 @@ class Bimaru(Problem):
         partir do estado passado como argumento."""
         # TODO -> se houver hints por explorar, vemos as hints
         # return [(row,col,size,ishorizontal:true)]
+        board = self.problem
+        print("AAAAAAAAAAAAAAA")
+        board.print()
+
+        # ver se ainda há dicas para explorar
+        if len(board.hints) > 0:
+            print("explorar dicas")
+            row = board.hints[0][0]
+            col = board.hints[0][1]
+            type = board.get_value(row, col).lower()
+            if type in ["t", "m", "b"]:
+                board.getVerticalActions(row, col, type)
+
+            # remover a dica das dicas a serem exploradas
+            board.hints.pop()
+
         pass
 
     def result(self, state: BimaruState, action):
@@ -418,8 +462,8 @@ class Bimaru(Problem):
         'state' passado como argumento. A ação a executar deve ser uma
         das presentes na lista obtida pela execução de
         self.actions(state)."""
-        (row,col,size,is_horizontal) = action
-        return BimaruState(state.board.set_boat(row,col,size,is_horizontal))
+        (row, col, size, is_horizontal) = action
+        return BimaruState(state.board.set_boat(row, col, size, is_horizontal))
         # TODO
         pass
 
@@ -428,7 +472,7 @@ class Bimaru(Problem):
         um estado objetivo. Deve verificar se todas as posições do tabuleiro
         estão preenchidas de acordo com as regras do problema."""
         # TODO -> ver se todos os barcos estão a 0
-        pass
+        return state.board.boats[0] == 0
 
     def h(self, node: Node):
         """Função heuristica utilizada para a procura A*."""
@@ -440,22 +484,28 @@ class Bimaru(Problem):
 
 if __name__ == "__main__":
     # TODO:
-    instance = Board.parse_instance()
-    #print(instance.rows)
-    #print(instance.cols)
-    print("\n")
-    for j in range(10):
+    board = Board.parse_instance()
+    # Criar uma instância de Bimaru:
+    problem = Bimaru(board)
+    # Criar um estado com a configuração inicial:
+    initial_state = BimaruState(board)
+    # print(instance.rows)
+    # print(instance.cols)
+    # print("\n")
+    # for j in range(10):
+    #     print(instance.rows[j], " ", instance.board[j])
 
-        print(instance.rows[j], " ", instance.board[j])
-
-    print(instance.get_value(0, 0))
-<<<<<<< Updated upstream
+    # print(instance.get_value(0, 0))
     # print(instance.adjacent_vertical_values(9,5))
-    print(instance.adjacent_horizontal_values(0, 0))
-    print(instance.hints)
-=======
-    print(instance.adjacent_vertical_values(9,5))
->>>>>>> Stashed changes
+    # print(instance.adjacent_horizontal_values(0, 0))
+    # print(instance.hints)
+
+    # print(instance.adjacent_vertical_values(9, 5))
+
+    board.print()
+    print(problem.goal_test(initial_state))
+    print(problem.actions(initial_state))
+
     # Ler o ficheiro do standard input,
     # Usar uma técnica de procura para resolver a instância,
     # Retirar a solução a partir do nó resultante,
