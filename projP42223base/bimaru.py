@@ -48,27 +48,40 @@ class Board:
         print(self.cols)
         print("Barcos por colocar = ", self.boats)
         print("Dicas por explorar = ", self.hints)
+        print("free_spaces -> \t")
+        print(self.free_spaces)
+    
+    def remove_free_space(self, row: int, col: int):
+        if self.board[row][col] == None or self.board[row][col] == '.':
+            self.free_spaces -= 1
 
     def place_water(self, row: int, col: int):
         """Coloca àgua na célula dada"""
+        self.remove_free_space(row, col)
         self.board[row][col] = "w"
 
     def place_top(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "t"
 
     def place_middle(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "m"
 
     def place_bottom(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "b"
 
     def place_right(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "r"
 
     def place_left(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "l"
 
     def place_circle(self, row: int, col: int):
+        self.remove_free_space(row, col)
         self.board[row][col] = "c"
 
     def clean_t(self, row: int, col: int):
@@ -330,6 +343,7 @@ class Board:
         # FIXME: pôr àgua nas linhas a mais
         instance.board = [[None for _ in range(11)] for _ in range(11)]
         instance.boats = [10, 4, 3, 2, 1]
+        instance.free_spaces = 100
 
         for i in range(11):
             instance.board[i][10] = 'w'
@@ -355,6 +369,7 @@ class Board:
             print("col = ", col)
             print(type)
             instance.board[row][col] = type
+            instance.free_spaces -= 1
             instance.clean_cell(row, col, type)
             if (type != "W"):
                 print("hint = ", type)
@@ -364,6 +379,8 @@ class Board:
                 else:
                     instance.boats[0] -= 1
                     instance.boats[1] -= 1
+            print("free_spaces -> \t")
+            print(instance.free_spaces)
 
         instance.clean_board()
         # TODO: verificar se já há barcos preenchidos
