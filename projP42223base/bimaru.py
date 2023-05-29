@@ -446,11 +446,36 @@ class Board:
         pass
     # TODO: outros metodos da classe
 
+    def get_nfrees_col(self, col: int) -> int:
+        n_frees_col = 0
+        for i in range (10):
+            if self.board[i][col] == (None or '.'):
+                n_frees_col += 1
+        return n_frees_col
+    
+    def get_nfrees_row(self, row: int) -> int:
+        n_frees_row = 0
+        for i in range (10):
+            if self.board[row][i] == (None or '.'):
+                n_frees_row += 1
+        return n_frees_row
+
 
     def isInvalidBoard(self):
-        for i in range (10):
+        """ for i in range (10):
             if (self.rows[i] < 0) or (self.cols[i] < 0):
-                return False
+                return True -> check if is not necessary"""
+        
+        if self.free_spaces < self.boats[0]:
+            return True
+        
+        if self.free_spaces < (self.boats[1] + self.boats[2]*2 + self.boats[3]*3 + self.boats[4]*4):
+            return True
+
+        for i in range(10):
+            if (self.board.rows[i] > self.get_nfrees_row(i)) or (self.board.cols[i] > self.get_nfrees_col(i)):
+                return True
+            
         #TODO complete
 
 
