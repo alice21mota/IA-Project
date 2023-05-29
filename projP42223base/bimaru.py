@@ -157,7 +157,7 @@ class Board:
         elif (type == "r"):
             self.clean_r(row, col)
         elif (type == "m"):
-            self.clean_m(row, col)
+            self.clean_m(row, col) 
 
     def clean_row(self, row: int):
         """Preenche os espaços vazios da linha com àgua"""
@@ -165,9 +165,11 @@ class Board:
             if (self.board[row][col] == None):
                 self.place_water(row, col)
 
+
     def clean_col(self, col: int):
         """Preenche os espaços vazios da linha com àgua"""
         for row in range(10):
+    
             if (self.board[row][col] == None):
                 self.place_water(row, col)
 
@@ -191,8 +193,9 @@ class Board:
         self.rows[row] -= 1
         if (self.rows[row] == 0):
             self.clean_row(row)
+
         self.cols[col] -= 1
-        if (self.cols[row] == 0):
+        if (self.cols[col] == 0):
             self.clean_col(col)
 
     def get_value(self, row: int, col: int) -> str:
@@ -371,11 +374,11 @@ class Board:
 
         return instance
 
-    def isValidPosition(self, row, col, type):
+    def isValidPosition(self, row: int, col: int, type: str):
         print("isValidPosition")
         # type must be in ["H"(horizontal), "V"(vertical), "C"(center)]
         if self.get_value(row, col) != None:
-            return false
+            return False
         if self.rows[row] < 1:
             return False
         if self.cols[col] < 1:
@@ -425,6 +428,13 @@ class Board:
     def getHorizontalActions(self, row, col, type):
         pass
     # TODO: outros metodos da classe
+
+
+    def isInvalidBoard(self):
+        for i in range (10):
+            if (self.rows[i] < 0) or (self.cols[i] < 0):
+                return False
+        #TODO complete
 
 
 class Bimaru(Problem):
