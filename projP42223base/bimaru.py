@@ -495,9 +495,6 @@ class Board:
         # TODO: verificar se já há barcos preenchidos
 
         # TODO: acho que devemos preencher aquilo que já se pode
-
-        # print(values)
-
         return instance
 
     def isValidPosition(self, row: int, col: int, type: str):
@@ -550,6 +547,7 @@ class Board:
             validActions.append((row, col, size, False))
         # FIXME: ver se apanha outra dica
         print("getActionsT = ", validActions)
+        return validActions
 
     def getActionsB(self, row, col):
         validActions = []
@@ -563,6 +561,7 @@ class Board:
             validActions.append((row-size+1, col, size, False))
         # FIXME: ver se apanha outra dica
         print("getActionsB = ", validActions)
+        return validActions
 
     def getActionsR(self, row, col):
         validActions = []
@@ -576,6 +575,7 @@ class Board:
             validActions.append((row, col-size+1, size, True))
         # FIXME: ver se apanha outra dica
         print("getActionsR = ", validActions)
+        return validActions
 
     def getActionsM(self, row, col):
         validActions = []
@@ -597,6 +597,7 @@ class Board:
                 if (self.isValidPosition(row, col+2, "H")):
                     validActions.append((row, col-1, 4, True))
         print("getActionsM = ", validActions)
+        return validActions
 
     def getActionsL(self, row, col):
         validActions = []
@@ -610,6 +611,7 @@ class Board:
             validActions.append((row, col, size, True))
         # FIXME: ver se apanha outra dica
         print("getActionsL = ", validActions)
+        return validActions
 
     # def getVerticalActions(self, row, col, type):
     #     print("vertical actions", type)
@@ -655,9 +657,8 @@ class Board:
 class Bimaru(Problem):
     def __init__(self, board: Board):
         """O construtor especifica o estado inicial."""
-        # TODO
-        self.initial = board
-        pass
+        state = BimaruState(board)
+        super().__init__(state)
 
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
@@ -666,7 +667,10 @@ class Bimaru(Problem):
         # TODO -> se houver hints por explorar, vemos as hints
         # return [(row,col,size,ishorizontal:true)]
         board = state.board
+        # id = state.id
+        # print(state)
         # print(board)
+        # print(id)
         # state.print()
         # print("AAAAAAAAAAAAAAA")
         # board.print()
@@ -742,14 +746,14 @@ if __name__ == "__main__":
 
     # print(instance.adjacent_vertical_values(9, 5))
 
-    board.print()
+    # board.print()
     # print(problem.goal_test(initial_state))
-    print(problem.actions(initial_state))
+    # print(problem.actions(initial_state))
     # print("new")
 
-    # goal_node = depth_first_tree_search(problem)
-    # print("Is goal?", problem.goal_test(goal_node.state))
-    # print("Solution:\n", goal_node.state.board.print(), sep="")
+    goal_node = depth_first_tree_search(problem)
+    print("Is goal?", problem.goal_test(goal_node.state))
+    print("Solution:\n", goal_node.state.board.print(), sep="")
 
 # Ler o ficheiro do standard input,
 # Usar uma técnica de procura para resolver a instância,
