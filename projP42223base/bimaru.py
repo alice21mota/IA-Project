@@ -61,37 +61,44 @@ class Board:
 
     def place_water(self, row: int, col: int):
         """Coloca àgua na célula dada"""
-        self.remove_free_space(row, col)
-        self.board[row][col] = "w"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "w"
 
     def place_top(self, row: int, col: int):
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "t"
+        self.clean_t(row, col)
 
     def place_middle(self, row: int, col: int):
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "m"
+        self.clean_m(row, col)
 
     def place_bottom(self, row: int, col: int):
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "b"
+        self.clean_b(row, col)
 
     def place_right(self, row: int, col: int):
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "r"
+        #self.clean_r(row, col)
 
     def place_left(self, row: int, col: int):
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "l"
+        self.clean_l(row, col)
 
     def place_circle(self, row: int, col: int):
         self.remove_free_space(row, col)
         self.board[row][col] = "c"
+        self.clean_c(row, col)
 
     def clean_t(self, row: int, col: int):
         self.place_water(row-1, col-1)
@@ -142,16 +149,13 @@ class Board:
     def clean_l(self, row: int, col: int):
         self.place_water(row-1, col)
         self.place_water(row+1, col)
-        self.place_water(row-1, col)
-        self.place_water(row+1, col)
         self.place_water(row-1, col-1)
         self.place_water(row, col-1)
         self.place_water(row+1, col-1)
-        self.place_water(row-1, col+1)
-        self.place_water(row-1, col+1)
-        self.place_water(row+1, col+1)
-        self.place_water(row-1, col+2)
+        self.place_water(row+1, col+1) 
         self.place_water(row+1, col+2)
+        self.place_water(row-1, col+1)
+        self.place_water(row-1, col+2) 
         # FIXME: não sei se estas duas linhas sao
         # desnecessarias porque depois há repeticao
         pass
@@ -361,7 +365,7 @@ class Board:
                 self.remove_boat(2)
                 
             
-            
+         
 
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
         new_board = Board()
@@ -381,6 +385,7 @@ class Board:
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
                     new_board.place_bottom(row, col)
+                    #new_board.clean_b(row,col)
 
         def set_size3():
             if is_horizontal:
