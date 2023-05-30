@@ -505,6 +505,37 @@ class Board:
         print("getActionsL = ", validActions)
         return validActions
 
+    def isValid(self, row, col, isHorizontal, size):
+        # print("isValid4")
+        # print(row, col, isHorizontal)
+        if isHorizontal and self.rows[row] < size:
+            # print("isHorizontal")
+            return False
+        if not isHorizontal and self.cols[col] < size:
+            # print("self.cols[col] < 4")
+            return False
+
+        for i in range(1, size):
+            if isHorizontal and self.get_value(row, col+i) != None:
+                # print("isHorizontal 2")
+                return False
+            if not isHorizontal and self.get_value(row+i, col) != None:
+                # print("self.get_value(row, col+i)")
+                return False
+        # print("saiu true")
+        return True
+
+    def getAll(self, size):
+        validActions = []
+        for row in range(10):
+            for col in range(10):
+                if self.get_value(row, col) == None:
+                    if col <= 10-size and self.isValid(row, col, True, size):
+                        validActions.append((row, col, size, True))
+                    if row <= 10-size and self.isValid(row, col, False, size):
+                        validActions.append((row, col, size, False))
+        return validActions
+
     # def getVerticalActions(self, row, col, type):
     #     print("vertical actions", type)
 
@@ -558,8 +589,12 @@ class Bimaru(Problem):
                 return board.getActionsR(row, col)
             if type == "m":
                 return board.getActionsM(row, col)
-
-        pass
+        else:
+            if board.boats[0] > 0:
+                for i in range(4, 0, -1):
+                    if board.boats[i] > 0:
+                        return board.getAll(i)
+        return []
 
     def result(self, state: BimaruState, action):
         """Retorna o estado resultante de executar a 'action' sobre
@@ -568,6 +603,7 @@ class Bimaru(Problem):
         self.actions(state)."""
         print("ENTREI RESULT")
         (row, col, size, is_horizontal) = action
+        print(row, col, size, is_horizontal)
         state.board.print()
         return BimaruState(state.board.set_boat(row, col, size, is_horizontal))
         # TODO
@@ -611,14 +647,20 @@ if __name__ == "__main__":
 
     # print(instance.adjacent_vertical_values(9, 5))
 
-    # board.print()
+    board.print()
     # print(problem.goal_test(initial_state))
-    # print(problem.actions(initial_state))
+    actions = problem.actions(initial_state)
+    for action in actions:
+        print(action)
+    # print(actions)
     # print("new")
 
-    goal_node = depth_first_tree_search(problem)
-    print("Is goal?", problem.goal_test(goal_node.state))
-    print("Solution:\n", goal_node.state.board.print(), sep="")
+    # new_state = problem.result(initial_state, (0, 6, 3, False))
+    # new_state.board.print()
+
+    # goal_node = depth_first_tree_search(problem)
+    # print("Is goal?", problem.goal_test(goal_node.state))
+    # print("Solution:\n", goal_node.state.board.print(), sep="")
 
 # Ler o ficheiro do standard input,
 # Usar uma técnica de procura para resolver a instância,
