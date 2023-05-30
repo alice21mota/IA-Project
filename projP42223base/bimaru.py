@@ -275,94 +275,158 @@ class Board:
         self.boats[0] -= 1
         self.boats[boat_size] -= 1 
     
-    def check_if_complete_boats(self, row: int, col: int, type = str):
+    def check_if_complete_boats(self, row: int, col: int):
         # When putting a left, checks if it can complete a boat
-        
+        type = self.get_value(row, col)
         # Receives an l
-        if type.lower() == "l":
-            if self.get_value(row, col+1).lower() == "r":
+        if type == "L":
+            if self.get_value(row, col+1) == "R":
                 self.remove_boat(2)
                 #TODO this is a complete boat
-            if self.get_value(row, col+2).lower() == "r":
-                self.place_middle(row, col+1)
-                self.remove_boat(3)
-            if self.get_value(row, col+3).lower() == "r":
-                if self.get_value(row, col+1) == None:
+            
+            elif col == 8:
+                self.place_right(row, col+1)
+                self.remove_boat(2)
+            
+            if row <= 7:
+                if self.get_value(row, col+2) == "R":
                     self.place_middle(row, col+1)
-                    self.place_middle(row, col+2)
-                    self.remove_boat(4)
+                    self.remove_boat(3)
+                
+            if row <= 6:
+                 if self.get_value(row, col+3) == "R":
+                    if self.get_value(row, col+1) == None:
+                        self.place_middle(row, col+1)
+                        self.place_middle(row, col+2)
+                        self.remove_boat(4)
 
         # Receives an r 
-        if type.lower() == "r":
-            if self.get_value(row, col-1).lower() == "l":
+        if type == "R":
+            if self.get_value(row, col-1) == "L":
                 self.remove_boat(2)
                 #TODO this is a complete boat
-            if self.get_value(row, col-2).lower() == "l":
-                self.place_middle(row, col-1)
-                self.remove_boat(3)
-            if self.get_value(row, col-3).lower() == "l":
-                self.place_middle(row, col-1)
-                self.place_middle(row, col-2)
-                self.remove_boat(4)
+            
+            elif col == 1:
+                self.place_left(row, col-1)
+                self.remove_boat(2)
+
+            if row >= 2:
+                if self.get_value(row, col-2) == "L":
+                    self.place_middle(row, col-1)
+                    self.remove_boat(3)
+            
+            if row >= 3:
+                if self.get_value(row, col-3) == "L":
+                    self.place_middle(row, col-1)
+                    self.place_middle(row, col-2)
+                    self.remove_boat(4)
         
         # Receives a t
-        if type.lower() == "t":
-            if self.get_value(row+1, col).lower() == "b":
+        if type == "T":
+            if self.get_value(row+1, col) == "B":
                 self.remove_boat(2)
-            if self.get_value(row+2, col).lower() == "b":
-                self.place_middle(row+1, col)
-                self.remove_boat(3)
-            if self.get_value(row+3, col).lower() == "b":
-                self.place_middle(row+1, col)
-                self.place_middle(row+2, col)
-                self.remove_boat(4)
+            
+            elif row == 8:
+                self.place_bottom(row+1, col)
+                self.remove_boat(2)
+            
+            if row <= 7:
+                if self.get_value(row+2, col) == "B":
+                    self.place_middle(row+1, col)
+                    self.remove_boat(3)
+
+            if row <= 6:
+                if self.get_value(row+3, col) == " B":
+                    self.place_middle(row+1, col)
+                    self.place_middle(row+2, col)
+                    self.remove_boat(4)
         
         # Receives a b
-        if type.lower() == "b":
-            if self.get_value(row-1, col).lower() == "t":
-                self.remove_boats(2)
-            if self.get_value(row-2, col).lower() == "t":
-                self.place_middle(row-1, col)
-                self.remove_boat(3)
-            if self.get_value(row-3, col).lower() == "t":
-                self.place_middle(row-1, col)
-                self.place_middle(row-2, col)
-                self.remove_boat(4)
+        if type == "B":
+            if self.get_value(row-1, col) == "T":
+                self.remove_boat(2)
+            
+            elif row == 1:
+                    self.place_top(row-1, col)
+                    self.remove_boat(2)
+            
+            if row >= 2:
+                if self.get_value(row-2, col) == "T":
+                    self.place_middle(row-1, col)
+                    self.remove_boat(3)
+            
+            if row >= 3:
+                if self.get_value(row-3, col) == "T":
+                    self.place_middle(row-1, col)
+                    self.place_middle(row-2, col)
+                    self.remove_boat(4)
         
         # Receives an m
-        if type.lower() == "m":
-            if self.get_value(row, col+2).lower() == "r":
-                self.place_middle(row, col+1)
-                self.place_left(row, col-1)
-                self.remove_boat(4)
-            if self.get_value(row, col+3).lower() == "r":
-                self.place_left(row, col+2)
-                self.remove_boat(2)
-
-            if self.get_value(row, col-2).lower() == "l":
-                self.place_middle(row, col-1)
-                self.place_right(row, col+1)
-                self.remove_boat(4)
-            if self.get_value(row, col-3).lower() == "l":
-                self.place_right(row, col-2)
-                self.remove_boat(2)
-
-            if self.get_value(row-2, col).lower() == "t":
-                self.place_middle(row-1, col)
-                self.place_bottom(row+1, col)
-                self.remove_boat(4)
-            if self.get_value(row-3, col).lower() == "t":
-                self.place_bottom(row-2, col)
-                self.remove_boat(2)
-
-            if self.get_value(row+2, col).lower() == "b":
-                self.place_top(row-1, col)
-                self.place_middle(row+1, col)
-                self.remove_boat(4)
+        if type == "M":
+            if row == 0:
+                self.place_water(row+1, col)
+                self.place_water(row+1, col-1)
+                self.place_water(row+1, col+1)
             
-            if self.get_value(row+3, col).lower() == "b":
-                self.place_top(row+2, col) == "t"
-                self.remove_boat(2)
+            if row == 9:
+                self.place_water(row-1, col)
+                self.place_water(row-1, col-1)
+                self.place_water(row-1, col+1)
+            
+            if col == 0:
+                self.place_water(row, col+1)
+                self.place_water(row-1, col+1)
+                self.place_water(row+1, col+1)
+
+            if col == 9:
+                self.place_water(row, col-1)
+                self.place_water(row-1, col-1)
+                self.place_water(row+1, col-1)
+            
+            if col <= 7:
+                if self.get_value(row, col+2) == "R":
+                    self.place_middle(row, col+1)
+                    self.place_left(row, col-1)
+                    self.remove_boat(4)
+
+            if col >= 2:
+                if self.get_value(row, col-2) == "L":
+                    self.place_middle(row, col-1)
+                    self.place_right(row, col+1)
+                    self.remove_boat(4)
+            
+
+            if col <= 6:
+                if self.get_value(row, col+3) == "R":
+                    self.place_left(row, col+2)
+                    self.remove_boat(2)
+            
+            if col >= 3:
+                if self.get_value(row, col-3) == "L":
+                    self.place_right(row, col-2)
+                    self.remove_boat(2)
+
+            if row >= 2:
+                if self.get_value(row-2, col) == "T":
+                    self.place_middle(row-1, col)
+                    self.place_bottom(row+1, col)
+                    self.remove_boat(4)
+
+            if row >= 3:
+                if self.get_value(row-3, col) == "T":
+                    self.place_bottom(row-2, col)
+                    self.remove_boat(2)
+
+            if row <= 7:
+                if self.get_value(row+2, col) == "B":
+                    self.place_top(row-1, col)
+                    self.place_middle(row+1, col)
+                    self.remove_boat(4)
+            
+            if row <= 6:
+                if self.get_value(row+3, col) == "B":
+                    self.place_top(row+2, col)
+                    self.remove_boat(2)
                 
             
          
@@ -488,6 +552,7 @@ class Board:
             if (type != "W"):
                 # print("hint = ", type)
                 instance.reduceValues(row, col)
+                instance.check_if_complete_boats(row, col)
                 if (type != "C"):
                     instance.hints.append((row, col))
                 else:
