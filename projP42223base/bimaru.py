@@ -61,32 +61,44 @@ class Board:
 
     def place_water(self, row: int, col: int):
         """Coloca àgua na célula dada"""
-        self.remove_free_space(row, col)
-        self.board[row][col] = "w"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "w"
 
     def place_top(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "t"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "t"
+        self.clean_t(row, col)
 
     def place_middle(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "m"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "m"
+        self.clean_m(row, col)
 
     def place_bottom(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "b"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "b"
+        self.clean_b(row, col)
 
     def place_right(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "r"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "r"
+        #self.clean_r(row, col)
 
     def place_left(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "l"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "l"
+        self.clean_l(row, col)
 
     def place_circle(self, row: int, col: int):
         self.remove_free_space(row, col)
         self.board[row][col] = "c"
+        self.clean_c(row, col)
 
     def clean_t(self, row: int, col: int):
         self.place_water(row-1, col-1)
@@ -140,10 +152,12 @@ class Board:
         self.place_water(row-1, col-1)
         self.place_water(row, col-1)
         self.place_water(row+1, col-1)
-        self.place_water(row-1, col+1)
-        self.place_water(row+1, col+1)
-        self.place_water(row-1, col+2)
+        self.place_water(row+1, col+1) 
         self.place_water(row+1, col+2)
+        self.place_water(row-1, col+1)
+        self.place_water(row-1, col+2) 
+        # FIXME: não sei se estas duas linhas sao
+        # desnecessarias porque depois há repeticao
         pass
 
     def clean_r(self, row: int, col: int):
@@ -256,6 +270,102 @@ class Board:
         """Devolve true se for um espaço em branco, false se estiver
         preenchido"""
         return self.board[row][col] == None
+    
+    def remove_boat(self, boat_size: int):
+        self.boats[0] -= 1
+        self.boats[boat_size] -= 1 
+    
+    def check_if_complete_boats(self, row: int, col: int, type = str):
+        # When putting a left, checks if it can complete a boat
+        
+        # Receives an l
+        if type.lower() == "l":
+            if self.get_value(row, col+1).lower() == "r":
+                self.remove_boat(2)
+                #TODO this is a complete boat
+            if self.get_value(row, col+2).lower() == "r":
+                self.place_middle(row, col+1)
+                self.remove_boat(3)
+            if self.get_value(row, col+3).lower() == "r":
+                if self.get_value(row, col+1) == None:
+                    self.place_middle(row, col+1)
+                    self.place_middle(row, col+2)
+                    self.remove_boat(4)
+
+        # Receives an r 
+        if type.lower() == "r":
+            if self.get_value(row, col-1).lower() == "l":
+                self.remove_boat(2)
+                #TODO this is a complete boat
+            if self.get_value(row, col-2).lower() == "l":
+                self.place_middle(row, col-1)
+                self.remove_boat(3)
+            if self.get_value(row, col-3).lower() == "l":
+                self.place_middle(row, col-1)
+                self.place_middle(row, col-2)
+                self.remove_boat(4)
+        
+        # Receives a t
+        if type.lower() == "t":
+            if self.get_value(row+1, col).lower() == "b":
+                self.remove_boat(2)
+            if self.get_value(row+2, col).lower() == "b":
+                self.place_middle(row+1, col)
+                self.remove_boat(3)
+            if self.get_value(row+3, col).lower() == "b":
+                self.place_middle(row+1, col)
+                self.place_middle(row+2, col)
+                self.remove_boat(4)
+        
+        # Receives a b
+        if type.lower() == "b":
+            if self.get_value(row-1, col).lower() == "t":
+                self.remove_boats(2)
+            if self.get_value(row-2, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.remove_boat(3)
+            if self.get_value(row-3, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.place_middle(row-2, col)
+                self.remove_boat(4)
+        
+        # Receives an m
+        if type.lower() == "m":
+            if self.get_value(row, col+2).lower() == "r":
+                self.place_middle(row, col+1)
+                self.place_left(row, col-1)
+                self.remove_boat(4)
+            if self.get_value(row, col+3).lower() == "r":
+                self.place_left(row, col+2)
+                self.remove_boat(2)
+
+            if self.get_value(row, col-2).lower() == "l":
+                self.place_middle(row, col-1)
+                self.place_right(row, col+1)
+                self.remove_boat(4)
+            if self.get_value(row, col-3).lower() == "l":
+                self.place_right(row, col-2)
+                self.remove_boat(2)
+
+            if self.get_value(row-2, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.place_bottom(row+1, col)
+                self.remove_boat(4)
+            if self.get_value(row-3, col).lower() == "t":
+                self.place_bottom(row-2, col)
+                self.remove_boat(2)
+
+            if self.get_value(row+2, col).lower() == "b":
+                self.place_top(row-1, col)
+                self.place_middle(row+1, col)
+                self.remove_boat(4)
+            
+            if self.get_value(row+3, col).lower() == "b":
+                self.place_top(row+2, col) == "t"
+                self.remove_boat(2)
+                
+            
+         
 
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
         new_board = Board()
@@ -269,48 +379,49 @@ class Board:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_right(row, col)
+                    new_board.place_right(row, col+1)
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+1, col)
+                    #new_board.clean_b(row,col)
 
         def set_size3():
             if is_horizontal:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+1)
                 if new_board.is_clear(row, col+2):
-                    new_board.place_left(row, col)
+                    new_board.place_right(row, col)+2
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+2, col)
 
         def set_size4():
             if is_horizontal:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+1)
                 if new_board.is_clear(row, col+2):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+2)
                 if new_board.is_clear(row, col+3):
-                    new_board.place_left(row, col)
+                    new_board.place_right(row, col+3)
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+2, col)
                 if new_board.is_clear(row+3, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+3, col)
 
         if size == 1:
             set_size1()
@@ -322,6 +433,8 @@ class Board:
             set_size4()
 
         return new_board
+    
+
 
     # def place_dots(self, h_row: int, h_col: int, h_sym: str):
       #  if h_sym == 'W': self.board[h_row][h_col] = h_sym
@@ -543,11 +656,38 @@ class Board:
     #     pass
     # TODO: outros metodos da classe
 
+    def get_nfrees_col(self, col: int) -> int:
+        n_frees_col = 0
+        for i in range (10):
+            if self.board[i][col] == (None or '.'):
+                n_frees_col += 1
+        return n_frees_col
+    
+    def get_nfrees_row(self, row: int) -> int:
+        n_frees_row = 0
+        for i in range (10):
+            if self.board[row][i] == (None or '.'):
+                n_frees_row += 1
+        return n_frees_row
+
+
     def isInvalidBoard(self):
+        """ for i in range (10):
         for i in range(10):
             if (self.rows[i] < 0) or (self.cols[i] < 0):
-                return False
-        # TODO complete
+                return True -> check if is not necessary"""
+        
+        if self.free_spaces < self.boats[0]:
+            return True
+        
+        if self.free_spaces < (self.boats[1] + self.boats[2]*2 + self.boats[3]*3 + self.boats[4]*4):
+            return True
+
+        for i in range(10):
+            if (self.board.rows[i] > self.get_nfrees_row(i)) or (self.board.cols[i] > self.get_nfrees_col(i)):
+                return True
+            
+        #TODO complete
 
 
 class Bimaru(Problem):
