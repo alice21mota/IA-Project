@@ -571,8 +571,8 @@ class Bimaru(Problem):
         # ver se ainda há dicas para explorar
         if len(board.hints) > 0:
             # print("explorar dicas")
-            row = board.hints[-2][0]
-            col = board.hints[-2][1]
+            row = board.hints[-1][0]
+            col = board.hints[-1][1]
             # remover a dica das dicas a serem exploradas
             board.hints.pop()
             type = board.get_value(row, col).lower()
