@@ -304,7 +304,7 @@ class Board:
         # Receives a t
         if type.lower() == "t":
             if self.get_value(row+1, col).lower() == "b":
-                self.remove_boats(2)
+                self.remove_boat(2)
             if self.get_value(row+2, col).lower() == "b":
                 self.place_middle(row+1, col)
                 self.remove_boat(3)
