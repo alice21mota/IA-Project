@@ -429,7 +429,18 @@ class Board:
                     self.remove_boat(2)
                 
             
-         
+    def createNewBoard(self):
+        new_board = Board()
+        new_board.rows = self.rows
+        new_board.cols = self.cols
+        new_board.hints = self.hints.copy()
+        new_board.boats = self.boats.copy()
+        new_board.board = []
+        for i in range(10):
+            new_board.board.append(self.board[i].copy())
+        new_board.free_spaces = self.free_spaces
+
+        return new_board    
 
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
         new_board = self.createNewBoard()
