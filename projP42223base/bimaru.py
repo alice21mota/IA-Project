@@ -382,6 +382,7 @@ class Board:
 
         def set_size1():
             new_board.place_circle(row, col)
+            self.remove_boat(1)
 
         def set_size2():
             if is_horizontal:
@@ -395,6 +396,7 @@ class Board:
                 if new_board.is_clear(row+1, col):
                     new_board.place_bottom(row+1, col)
                     # new_board.clean_b(row,col)
+            self.remove_boat(2)
 
         def set_size3():
             if is_horizontal:
@@ -411,6 +413,7 @@ class Board:
                     new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
                     new_board.place_bottom(row+2, col)
+            self.remove_boat(3)
 
         def set_size4():
             if is_horizontal:
@@ -431,6 +434,7 @@ class Board:
                     new_board.place_middle(row+2, col)
                 if new_board.is_clear(row+3, col):
                     new_board.place_bottom(row+3, col)
+            self.remove_boat(4)
 
         if size == 1:
             set_size1()
