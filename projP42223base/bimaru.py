@@ -436,7 +436,7 @@ class Board:
         new_board.hints = self.hints.copy()
         new_board.boats = self.boats.copy()
         new_board.board = []
-        for i in range(10):
+        for i in range(11):
             new_board.board.append(self.board[i].copy())
         new_board.free_spaces = self.free_spaces
 
