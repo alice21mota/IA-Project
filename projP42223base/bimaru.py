@@ -379,12 +379,12 @@ class Board:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_right(row, col)
+                    new_board.place_right(row, col+1)
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+1, col)
                     #new_board.clean_b(row,col)
 
         def set_size3():
@@ -392,36 +392,36 @@ class Board:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+1)
                 if new_board.is_clear(row, col+2):
-                    new_board.place_left(row, col)
+                    new_board.place_right(row, col)+2
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+2, col)
 
         def set_size4():
             if is_horizontal:
                 if new_board.is_clear(row, col):
                     new_board.place_left(row, col)
                 if new_board.is_clear(row, col+1):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+1)
                 if new_board.is_clear(row, col+2):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row, col+2)
                 if new_board.is_clear(row, col+3):
-                    new_board.place_left(row, col)
+                    new_board.place_right(row, col+3)
             else:
                 if new_board.is_clear(row, col):
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
-                    new_board.place_middle(row, col)
+                    new_board.place_middle(row+2, col)
                 if new_board.is_clear(row+3, col):
-                    new_board.place_bottom(row, col)
+                    new_board.place_bottom(row+3, col)
 
         if size == 1:
             set_size1()
