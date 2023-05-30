@@ -131,17 +131,17 @@ class Board:
         self.place_water(row-2, col+1)
 
     def clean_l(self, row: int, col: int):
-        self.place_water(row-1, col-1)
         self.place_water(row-1, col)
-        self.place_water(row-1, col+1)
+        self.place_water(row+1, col)
+        self.place_water(row-1, col-1)
         self.place_water(row, col-1)
-        self.place_water(row, col+1)
-        # FIXME: não sei se estas duas linhas sao
         self.place_water(row+1, col-1)
-        # desnecessarias porque depois há repeticao
+        self.place_water(row-1, col+1)
         self.place_water(row+1, col+1)
         self.place_water(row-1, col+2)
         self.place_water(row+1, col+2)
+        # FIXME: não sei se estas duas linhas sao
+        # desnecessarias porque depois há repeticao
         pass
 
     def clean_r(self, row: int, col: int):
