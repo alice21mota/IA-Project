@@ -65,24 +65,29 @@ class Board:
         self.board[row][col] = "w"
 
     def place_top(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "t"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "t"
 
     def place_middle(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "m"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "m"
 
     def place_bottom(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "b"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "b"
 
     def place_right(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "r"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "r"
 
     def place_left(self, row: int, col: int):
-        self.remove_free_space(row, col)
-        self.board[row][col] = "l"
+        if self.get_value(row, col) == None:
+            self.remove_free_space(row, col)
+            self.board[row][col] = "l"
 
     def place_circle(self, row: int, col: int):
         self.remove_free_space(row, col)
@@ -261,6 +266,102 @@ class Board:
         """Devolve true se for um espaço em branco, false se estiver
         preenchido"""
         return self.board[row][col] == None
+    
+    def remove_boat(self, boat_size: int):
+        self.boats[0] -= 1
+        self.boats[boat_size] -= 1 
+    
+    def check_if_complete_boats(self, row: int, col: int, type = str):
+        # When putting a left, checks if it can complete a boat
+        
+        # Receives an l
+        if type.lower() == "l":
+            if self.get_value(row, col+1).lower() == "r":
+                self.remove_boat(2)
+                #TODO this is a complete boat
+            if self.get_value(row, col+2).lower() == "r":
+                self.place_middle(row, col+1)
+                self.remove_boat(3)
+            if self.get_value(row, col+3).lower() == "r":
+                if self.get_value(row, col+1) == None:
+                    self.place_middle(row, col+1)
+                    self.place_middle(row, col+2)
+                    self.remove_boat(4)
+
+        # Receives an r 
+        if type.lower() == "r":
+            if self.get_value(row, col-1).lower() == "l":
+                self.remove_boat(2)
+                #TODO this is a complete boat
+            if self.get_value(row, col-2).lower() == "l":
+                self.place_middle(row, col-1)
+                self.remove_boat(3)
+            if self.get_value(row, col-3).lower() == "l":
+                self.place_middle(row, col-1)
+                self.place_middle(row, col-2)
+                self.remove_boat(4)
+        
+        # Receives a t
+        if type.lower() == "t":
+            if self.get_value(row+1, col).lower() == "b":
+                self.remove_boats(2)
+            if self.get_value(row+2, col).lower() == "b":
+                self.place_middle(row+1, col)
+                self.remove_boat(3)
+            if self.get_value(row+3, col).lower() == "b":
+                self.place_middle(row+1, col)
+                self.place_middle(row+2, col)
+                self.remove_boat(4)
+        
+        # Receives a b
+        if type.lower() == "b":
+            if self.get_value(row-1, col).lower() == "t":
+                self.remove_boats(2)
+            if self.get_value(row-2, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.remove_boat(3)
+            if self.get_value(row-3, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.place_middle(row-2, col)
+                self.remove_boat(4)
+        
+        # Receives an m
+        if type.lower() == "m":
+            if self.get_value(row, col+2).lower() == "r":
+                self.place_middle(row, col+1)
+                self.place_left(row, col-1)
+                self.remove_boat(4)
+            if self.get_value(row, col+3).lower() == "r":
+                self.place_left(row, col+2)
+                self.remove_boat(2)
+
+            if self.get_value(row, col-2).lower() == "l":
+                self.place_middle(row, col-1)
+                self.place_right(row, col+1)
+                self.remove_boat(4)
+            if self.get_value(row, col-3).lower() == "l":
+                self.place_right(row, col-2)
+                self.remove_boat(2)
+
+            if self.get_value(row-2, col).lower() == "t":
+                self.place_middle(row-1, col)
+                self.place_bottom(row+1, col)
+                self.remove_boat(4)
+            if self.get_value(row-3, col).lower() == "t":
+                self.place_bottom(row-2, col)
+                self.remove_boat(2)
+
+            if self.get_value(row+2, col).lower() == "b":
+                self.place_top(row-1, col)
+                self.place_middle(row+1, col)
+                self.remove_boat(4)
+            
+            if self.get_value(row+3, col).lower() == "b":
+                self.place_top(row+2, col) == "t"
+                self.remove_boat(2)
+                
+            
+            
 
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
         new_board = Board()
@@ -327,6 +428,8 @@ class Board:
             set_size4()
 
         return new_board
+    
+
 
     # def place_dots(self, h_row: int, h_col: int, h_sym: str):
       #  if h_sym == 'W': self.board[h_row][h_col] = h_sym
