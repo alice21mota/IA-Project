@@ -87,7 +87,7 @@ class Board:
         if self.get_value(row, col) == None:
             self.remove_free_space(row, col)
             self.board[row][col] = "r"
-        #self.clean_r(row, col)
+        # self.clean_r(row, col)
 
     def place_left(self, row: int, col: int):
         if self.get_value(row, col) == None:
@@ -152,10 +152,10 @@ class Board:
         self.place_water(row-1, col-1)
         self.place_water(row, col-1)
         self.place_water(row+1, col-1)
-        self.place_water(row+1, col+1) 
+        self.place_water(row+1, col+1)
         self.place_water(row+1, col+2)
         self.place_water(row-1, col+1)
-        self.place_water(row-1, col+2) 
+        self.place_water(row-1, col+2)
         # FIXME: não sei se estas duas linhas sao
         # desnecessarias porque depois há repeticao
         pass
@@ -270,7 +270,7 @@ class Board:
         """Devolve true se for um espaço em branco, false se estiver
         preenchido"""
         return self.board[row][col] == None
-    
+
     def remove_boat(self, boat_size: int):
         self.boats[0] -= 1
         self.boats[boat_size] -= 1 
@@ -432,11 +432,11 @@ class Board:
          
 
     def set_boat(self, row: int, col: int, size: int, is_horizontal: bool):
-        new_board = Board()
-        new_board = self
+        new_board = self.createNewBoard()
 
         def set_size1():
             new_board.place_circle(row, col)
+            self.remove_boat(1)
 
         def set_size2():
             if is_horizontal:
@@ -449,7 +449,8 @@ class Board:
                     new_board.place_top(row, col)
                 if new_board.is_clear(row+1, col):
                     new_board.place_bottom(row+1, col)
-                    #new_board.clean_b(row,col)
+                    # new_board.clean_b(row,col)
+            self.remove_boat(2)
 
         def set_size3():
             if is_horizontal:
@@ -466,6 +467,7 @@ class Board:
                     new_board.place_middle(row+1, col)
                 if new_board.is_clear(row+2, col):
                     new_board.place_bottom(row+2, col)
+            self.remove_boat(3)
 
         def set_size4():
             if is_horizontal:
@@ -486,6 +488,7 @@ class Board:
                     new_board.place_middle(row+2, col)
                 if new_board.is_clear(row+3, col):
                     new_board.place_bottom(row+3, col)
+            self.remove_boat(4)
 
         if size == 1:
             set_size1()
@@ -497,8 +500,6 @@ class Board:
             set_size4()
 
         return new_board
-    
-
 
     # def place_dots(self, h_row: int, h_col: int, h_sym: str):
       #  if h_sym == 'W': self.board[h_row][h_col] = h_sym
@@ -683,6 +684,38 @@ class Board:
         print("getActionsL = ", validActions)
         return validActions
 
+    def isValid(self, row, col, isHorizontal, size):
+        # print("isValid4")
+        # print(row, col, isHorizontal)
+        if isHorizontal and self.rows[row] < size:
+            # print("isHorizontal")
+            return False
+        if not isHorizontal and self.cols[col] < size:
+            # print("self.cols[col] < 4")
+            return False
+
+        for i in range(1, size):
+            if isHorizontal and self.get_value(row, col+i) != None:
+                # print("isHorizontal 2")
+                return False
+            if not isHorizontal and self.get_value(row+i, col) != None:
+                # print("self.get_value(row, col+i)")
+                return False
+        # print("saiu true")
+        return True
+
+    def getAll(self, size):
+        validActions = []
+        for row in range(10):
+            for col in range(10):
+                if self.get_value(row, col) == None:
+                    if col <= 10-size and self.isValid(row, col, True, size):
+                        validActions.append((row, col, size, True))
+                    if row <= 10-size and self.isValid(row, col, False, size):
+                        validActions.append((row, col, size, False))
+        print("validActions = ", validActions)
+        return validActions
+
     # def getVerticalActions(self, row, col, type):
     #     print("vertical actions", type)
 
@@ -692,36 +725,35 @@ class Board:
 
     def get_nfrees_col(self, col: int) -> int:
         n_frees_col = 0
-        for i in range (10):
+        for i in range(10):
             if self.board[i][col] == (None or '.'):
                 n_frees_col += 1
         return n_frees_col
-    
+
     def get_nfrees_row(self, row: int) -> int:
         n_frees_row = 0
-        for i in range (10):
+        for i in range(10):
             if self.board[row][i] == (None or '.'):
                 n_frees_row += 1
         return n_frees_row
-
 
     def isInvalidBoard(self):
         """ for i in range (10):
         for i in range(10):
             if (self.rows[i] < 0) or (self.cols[i] < 0):
                 return True -> check if is not necessary"""
-        
+
         if self.free_spaces < self.boats[0]:
             return True
-        
+
         if self.free_spaces < (self.boats[1] + self.boats[2]*2 + self.boats[3]*3 + self.boats[4]*4):
             return True
 
         for i in range(10):
             if (self.board.rows[i] > self.get_nfrees_row(i)) or (self.board.cols[i] > self.get_nfrees_col(i)):
                 return True
-            
-        #TODO complete
+
+        # TODO complete
 
 
 class Bimaru(Problem):
@@ -763,8 +795,12 @@ class Bimaru(Problem):
                 return board.getActionsR(row, col)
             if type == "m":
                 return board.getActionsM(row, col)
-
-        pass
+        else:
+            if board.boats[0] > 0:
+                for i in range(4, 0, -1):
+                    if board.boats[i] > 0:
+                        return board.getAll(i)
+        return []
 
     def result(self, state: BimaruState, action):
         """Retorna o estado resultante de executar a 'action' sobre
@@ -773,6 +809,7 @@ class Bimaru(Problem):
         self.actions(state)."""
         print("ENTREI RESULT")
         (row, col, size, is_horizontal) = action
+        print(row, col, size, is_horizontal)
         state.board.print()
         return BimaruState(state.board.set_boat(row, col, size, is_horizontal))
         # TODO
@@ -818,12 +855,24 @@ if __name__ == "__main__":
 
     # board.print()
     # print(problem.goal_test(initial_state))
-    # print(problem.actions(initial_state))
+    # actions = problem.actions(initial_state)
+    # for action in actions:
+    #     print(action)
+    # print(actions)
     # print("new")
+
+    # new_state = problem.result(initial_state, (0, 6, 3, False))
+    # new_state.board.print()
 
     goal_node = depth_first_tree_search(problem)
     print("Is goal?", problem.goal_test(goal_node.state))
     print("Solution:\n", goal_node.state.board.print(), sep="")
+
+    # print(board.board)
+    # new_board.board[5][5] = "E"
+
+    # board.print()
+    # new_board.print()
 
 # Ler o ficheiro do standard input,
 # Usar uma técnica de procura para resolver a instância,
