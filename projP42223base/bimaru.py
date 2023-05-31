@@ -38,21 +38,21 @@ class Board:
 
     # def print(self):
     #     """Mostrar o estado do board"""
-    #     print("===============================================")
-    #     print("Board:")
+    # #    print("===============================================")
+    # #    print("Board:")
     #     for i in range(10):
     #         for j in range(10):
-    #             print(self.board[i][j]
+    #         #    print(self.board[i][j]
     #                   if self.board[i][j] is not None else ".", end=" "
     #                   )
-    #         print(self.rows[i])
+    #     #    print(self.rows[i])
     #     for i in range(10):
-    #         print(self.cols[i], end=" ")
-    #     print()
+    #     #    print(self.cols[i], end=" ")
+    # #    print()
     #     # print(self.cols)
-    #     print("Barcos por colocar = ", self.boats)
-    #     print("Dicas por explorar = ", self.hints)
-    #     print("free_spaces = self.free_spaces")
+    # #    print("Barcos por colocar = ", self.boats)
+    # #    print("Dicas por explorar = ", self.hints)
+    # #    print("free_spaces = self.free_spaces")
     # print("===============================================")
     def print(self):
         str = ""
@@ -316,8 +316,8 @@ class Board:
                 if self.get_value(row-1, col) == "T":
                     self.hints.remove((row-1, col))
                     self.remove_boat(self, 2)
-                    print("full BT")
-                    print(self.boats)
+                #    print("full BT")
+                #    print(self.boats)
                     return True
 
             if self.get_value(row-2, col) != None:
@@ -325,7 +325,7 @@ class Board:
                     self.hints.remove((row-2, col))
                     self.place_middle(row-1, col)
                     self.remove_boat(self, 3)
-                    print("not here")
+                #    print("not here")
                     return True
 
             if self.get_value(row-3, col) != None:
@@ -334,7 +334,7 @@ class Board:
                     self.place_middle(row-1, col)
                     self.place_middle(row-2, col)
                     self.remove_boat(self, 4)
-                    print("not here 4")
+                #    print("not here 4")
                     return True
 
         if type == "R":
@@ -342,7 +342,7 @@ class Board:
                 if self.get_value(row, col-1) == "L":
                     self.hints.remove((row, col-1))
                     self.remove_boat(self, 2)
-                    print("not here R")
+                #    print("not here R")
                     return True
 
             if self.get_value(row, col-2) != None:
@@ -350,7 +350,7 @@ class Board:
                     self.hints.remove((row, col-2))
                     self.place_middle(row, col-1)
                     self.remove_boat(self, 3)
-                    print("not here  R 3")
+                #    print("not here  R 3")
                     return True
 
             if self.get_value(row, col-3) != None:
@@ -359,7 +359,7 @@ class Board:
                     self.place_middle(row, col-1)
                     self.place_middle(row, col-2)
                     self.remove_boat(self, 4)
-                    print("not here  R 4")
+                #    print("not here  R 4")
                     return True
 
     def createNewBoard(self):
@@ -497,21 +497,21 @@ class Board:
             instance.free_spaces -= 1
             instance.clean_cell(row, col, type)
             if (type != "W"):
-                print("hint = ", type)
+                #    print("hint = ", type)
                 instance.reduceValues(row, col)
                 # instance.check_if_complete_boats(row, col)
                 if (type != "C"):
                     if not instance.check_if_complete_boats(row, col):
-                        print("HELLLOOOOO THERE")
-                        print(row, col)
+                        #    print("HELLLOOOOO THERE")
+                        #    print(row, col)
                         instance.hints.append((row, col))
-                        print("hint != C = ", type)
+                    #    print("hint != C = ", type)
                 else:
                     instance.boats[0] -= 1
                     instance.boats[1] -= 1
-                    print(instance.boats)
-            print("free_spaces -> \t")
-            print(instance.free_spaces)
+                #    print(instance.boats)
+        #    print("free_spaces -> \t")
+        #    print(instance.free_spaces)
 
         instance.clean_board()
         # TODO: verificar se já há barcos preenchidos
@@ -559,51 +559,54 @@ class Board:
 
     def getActionsT(self, row, col):
         validActions = []
-        print(" When enters get T")
-        print(board.hints)
+    #    print(" When enters get T")
+    #    print(board.hints)
         for size in range(2, 5):
             # print(size)
-            if (self.cols[col] < size - 1 or self.rows[row+size-1] < 1 or not self.isValidPosition(row+size-1, col, "V")):
-                break
-            if self.boats[size] < 1:
-                # já foram colocados todos os barcos deste tamanho
-                continue
-            validActions.append((row, col, size, False))
+            if row-size+1 <= 9:
+                if (self.cols[col] < size - 1 or self.rows[row+size-1] < 1 or not self.isValidPosition(row+size-1, col, "V")):
+                    break
+                if self.boats[size] < 1:
+                    # já foram colocados todos os barcos deste tamanho
+                    continue
+                validActions.append((row, col, size, False))
         # FIXME: ver se apanha outra dica
         # print("getActionsT = ", validActions)
-        print(board.hints)
-        print(" When exits get T")
-        print("got out T")
+    #    print(board.hints)
+    #    print(" When exits get T")
+    #    print("got out T")
         return validActions
 
     def getActionsB(self, row, col):
         validActions = []
         for size in range(2, 5):
             # print(size)
-            if (self.cols[col] < size - 1 or self.rows[row-size+1] < 1 or not self.isValidPosition(row-size+1, col, "V")):
-                break
-            if self.boats[size] < 1:
-                # já foram colocados todos os barcos deste tamanho
-                continue
-            validActions.append((row-size+1, col, size, False))
+            if row-size+1 >= 0:
+                if (self.cols[col] < size - 1 or self.rows[row-size+1] < 1 or not self.isValidPosition(row-size+1, col, "V")):
+                    break
+                if self.boats[size] < 1:
+                    # já foram colocados todos os barcos deste tamanho
+                    continue
+                validActions.append((row-size+1, col, size, False))
         # FIXME: ver se apanha outra dica
         # print("getActionsB = ", validActions)
-        print("got out B")
+    #    print("got out B")
         return validActions
 
     def getActionsR(self, row, col):
         validActions = []
         for size in range(2, 5):
             # print(size)
-            if (self.cols[col-size+1] < 1 or self.rows[row] < size - 1 or not self.isValidPosition(row, col-size+1, "H")):
-                break
-            if self.boats[size] < 1:
-                # já foram colocados todos os barcos deste tamanho
-                continue
-            validActions.append((row, col-size+1, size, True))
+            if col-size+1 >= 0:
+                if (self.cols[col-size+1] < 1 or self.rows[row] < size - 1 or not self.isValidPosition(row, col-size+1, "H")):
+                    break
+                if self.boats[size] < 1:
+                    # já foram colocados todos os barcos deste tamanho
+                    continue
+                validActions.append((row, col-size+1, size, True))
         # FIXME: ver se apanha outra dica
         # print("getActionsR = ", validActions)
-        print("got out R")
+    #    print("got out R")
         return validActions
 
     def getActionsM(self, row, col):
@@ -616,7 +619,7 @@ class Board:
                     validActions.append((row-2, col, 4, False))
                 if self.isValidPosition(row+2, col, "V"):
                     validActions.append((row-1, col, 4, False))
-            print("1st if M")
+        #    print("1st if M")
         # print("getActionsM = ", validActions)
 
         if self.isValidPosition(row, col-1, "H") and self.isValidPosition(row, col+1, "H") and self.rows[row] >= 2:
@@ -627,30 +630,31 @@ class Board:
                     validActions.append((row, col-2, 4, True))
                 if (self.isValidPosition(row, col+2, "H")):
                     validActions.append((row, col-1, 4, True))
-            print("2nd if M")
+        #    print("2nd if M")
         # print("getActionsM = ", validActions)
-        print("got out M")
+    #    print("got out M")
         return validActions
 
     def getActionsL(self, row, col):
         validActions = []
         for size in range(2, 5):
             # print(size)
-            if (self.cols[col+size-1] < 1 or self.rows[row] < size - 1 or not self.isValidPosition(row, col+size-1, "H")):
-                break
-            if self.boats[size] < 1:
-                # já foram colocados todos os barcos deste tamanho
-                continue
-            validActions.append((row, col, size, True))
+            if (col+size-1 <= 9):
+                if (self.cols[col+size-1] < 1 or self.rows[row] < size - 1 or not self.isValidPosition(row, col+size-1, "H")):
+                    break
+                if self.boats[size] < 1:
+                    # já foram colocados todos os barcos deste tamanho
+                    continue
+                validActions.append((row, col, size, True))
         # FIXME: ver se apanha outra dica
-        print("getActionsL = ", validActions)
+    #    print("getActionsL = ", validActions)
         return validActions
 
     def isValid(self, row, col, isHorizontal, size):
-        print("isValid4")
+        #    print("isValid4")
         # # print(row, col, isHorizontal)
         if isHorizontal and self.rows[row] < size:
-            print("isHorizontal")
+            #    print("isHorizontal")
             return False
         if not isHorizontal and self.cols[col] < size:
             # # print("self.cols[col] < 4")
@@ -675,11 +679,11 @@ class Board:
                         validActions.append((row, col, size, True))
                     if row <= 10-size and self.isValid(row, col, False, size):
                         validActions.append((row, col, size, False))
-        print("validActions__ = ", validActions)
+    #    print("validActions__ = ", validActions)
         return validActions
 
     # def getVerticalActions(self, row, col, type):
-    # #     print("vertical actions", type)
+    # # #    print("vertical actions", type)
 
     # def getHorizontalActions(self, row, col, type):
     #     pass
@@ -712,7 +716,7 @@ class Board:
             return True
 
         for i in range(10):
-            if (self.board.rows[i] > self.get_nfrees_row(i)) or (self.board.cols[i] > self.get_nfrees_col(i)):
+            if (self.rows[i] > self.get_nfrees_row(i)) or (self.cols[i] > self.get_nfrees_col(i)):
                 return True
 
         # TODO complete
@@ -727,63 +731,66 @@ class Bimaru(Problem):
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
         partir do estado passado como argumento."""
-        print("ENTREI ACTIONS")
+    #    print("ENTREI ACTIONS")
         # TODO -> se houver hints por explorar, vemos as hints
         # return [(row,col,size,ishorizontal:true)]
         board = state.board
         # id = state.id
         # print(state)
-        print(board)
+    #    print(board)
         # # print(id)
         # # state.print()
-        print("AAAAAAAAAAAAAAA")
-        print("len before is")
-        print(len(board.hints))
+    #    print("AAAAAAAAAAAAAAA")
+    #    print("len before is")
+    #    print(len(board.hints))
         # # board.print()
+
+        # if board.isInvalidBoard():
+        #     return []
 
         # ver se ainda há dicas para explorar
         if len(board.hints) > 0:
-            print("hints areeeee ->>>>>>>>>")
-            print(board.hints)
-            print("explorar dicas")
-            print("len is --------->>>>------------->")
-            print(len(board.hints))
+            #    print("hints areeeee ->>>>>>>>>")
+            #    print(board.hints)
+            #    print("explorar dicas")
+            #    print("len is --------->>>>------------->")
+            #    print(len(board.hints))
             row = board.hints[-1][0]
             col = board.hints[-1][1]
-            print(row, col)
+        #    print(row, col)
             # remover a dica das dicas a serem exploradas
             board.hints.pop()
-            print(board.hints)
-            print("poped hints")
+        #    print(board.hints)
+        #    print("poped hints")
             # print(board.hints == [])
             type = board.get_value(row, col).lower()
-            print("Type is _____ in actions")
-            print(type)
+        #    print("Type is _____ in actions")
+        #    print(type)
             if type == "t":
-                print("ACTIONS T")
-                print(board.hints)
+                #    print("ACTIONS T")
+                #    print(board.hints)
                 return board.getActionsT(row, col)
             if type == "b":
-                print("ACTIONS B")
+                #    print("ACTIONS B")
                 return board.getActionsB(row, col)
             if type == "l":
-                print("ACTIONS L")
+                #    print("ACTIONS L")
                 return board.getActionsL(row, col)
             if type == "r":
-                print("ACTIONS R")
+                #    print("ACTIONS R")
                 return board.getActionsR(row, col)
             if type == "m":
-                print("ACTIONS M")
+                #    print("ACTIONS M")
                 return board.getActionsM(row, col)
-            print("len is ---------------------->")
-            print(len(board.hints))
+        #    print("len is ---------------------->")
+        #    print(len(board.hints))
         else:
             if board.boats[0] > 0:
                 for i in range(4, 0, -1):
-                    print("--->>>>>-----")
+                    #    print("--->>>>>-----")
                     if board.boats[i] > 0:
-                        print(board.boats[i])
-                        print("<--------")
+                        #    print(board.boats[i])
+                        #    print("<--------")
                         return board.getAll(i)
         return []
 
@@ -832,7 +839,7 @@ if __name__ == "__main__":
     # # print(instance.cols)
     # # print("\n")
     # for j in range(10):
-    # #     print(instance.rows[j], " ", instance.board[j])
+    # # #    print(instance.rows[j], " ", instance.board[j])
 
     # # print(instance.get_value(0, 0))
     # # print(instance.adjacent_vertical_values(9,5))
@@ -845,7 +852,7 @@ if __name__ == "__main__":
     # # print(problem.goal_test(initial_state))
     # actions = problem.actions(initial_state)
     # for action in actions:
-    # #     print(action)
+    # # #    print(action)
     # # print(actions)
     # # print("new")
 
