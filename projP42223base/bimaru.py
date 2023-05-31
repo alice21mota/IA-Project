@@ -692,14 +692,14 @@ class Board:
     def get_nfrees_col(self, col: int) -> int:
         n_frees_col = 0
         for i in range(10):
-            if self.board[i][col] == (None or '.'):
+            if self.board[i][col] == None:
                 n_frees_col += 1
         return n_frees_col
 
     def get_nfrees_row(self, row: int) -> int:
         n_frees_row = 0
         for i in range(10):
-            if self.board[row][i] == (None or '.'):
+            if self.board[row][i] == None:
                 n_frees_row += 1
         return n_frees_row
 
@@ -710,15 +710,18 @@ class Board:
                 return True -> check if is not necessary"""
 
         if self.free_spaces < self.boats[0]:
+            # print("freee_spaces")
             return True
 
         if self.free_spaces < (self.boats[1] + self.boats[2]*2 + self.boats[3]*3 + self.boats[4]*4):
+            # print("freee_spaces multiplicaçao")
             return True
 
         for i in range(10):
             if (self.rows[i] > self.get_nfrees_row(i)) or (self.cols[i] > self.get_nfrees_col(i)):
+                # print("FOOOORO")
                 return True
-
+        return False
         # TODO complete
 
 
@@ -745,8 +748,8 @@ class Bimaru(Problem):
     #    print(len(board.hints))
         # # board.print()
 
-        # if board.isInvalidBoard():
-        #     return []
+        if board.isInvalidBoard():
+            return []
 
         # ver se ainda há dicas para explorar
         if len(board.hints) > 0:
