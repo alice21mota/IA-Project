@@ -640,6 +640,8 @@ class Bimaru(Problem):
         """O construtor especifica o estado inicial."""
         state = BimaruState(board)
         super().__init__(state)
+        self.nosGerados = 0
+        self.nosExpandidos = 0
 
     def actions(self, state: BimaruState):
         """Retorna uma lista de ações que podem ser executadas a
@@ -659,19 +661,31 @@ class Bimaru(Problem):
             board.hints.pop()
             type = board.get_value(row, col).lower()
             if type == "t":
+                self.nosGerados += len(board.getActionsT(row, col))
+                print("len das actions =", len(board.getActionsT(row, col)))
                 return board.getActionsT(row, col)
             if type == "b":
+                self.nosGerados += len(board.getActionsB(row, col))
+                print("len das actions =", len(board.getActionsB(row, col)))
                 return board.getActionsB(row, col)
             if type == "l":
+                self.nosGerados += len(board.getActionsL(row, col))
+                print("len das actions =", len(board.getActionsL(row, col)))
                 return board.getActionsL(row, col)
             if type == "r":
+                self.nosGerados += len(board.getActionsR(row, col))
+                print("len das actions =", len(board.getActionsR(row, col)))
                 return board.getActionsR(row, col)
             if type == "m":
+                self.nosGerados += len(board.getActionsM(row, col))
+                print("len das actions =", len(board.getActionsM(row, col)))
                 return board.getActionsM(row, col)
         else:
             if board.boats[0] > 0:
                 for i in range(4, 0, -1):
                     if board.boats[i] > 0:
+                        self.nosGerados += len(board.getAll(i))
+                        print("len das actions =", len(board.getAll(i)))
                         return board.getAll(i)
         return []
 
@@ -680,7 +694,9 @@ class Bimaru(Problem):
         'state' passado como argumento. A ação a executar deve ser uma
         das presentes na lista obtida pela execução de
         self.actions(state)."""
-
+        self.nosExpandidos += 1
+        print("nosGerados =", self.nosGerados)
+        print("nosExpandidos =", self.nosExpandidos)
         (row, col, size, is_horizontal) = action
         newState = BimaruState(
             state.board.set_boat(
