@@ -690,17 +690,21 @@ class Board:
     # TODO: outros metodos da classe
 
     def get_nfrees_col(self, col: int) -> int:
+        print("ENTROU COLS")
         n_frees_col = 0
         for i in range(10):
-            if self.board[i][col] == (None or '.'):
+            if self.board[i][col] == (None):
                 n_frees_col += 1
+        print("SAIU COLS")
         return n_frees_col
 
     def get_nfrees_row(self, row: int) -> int:
+        print("ENTROU ROWS")
         n_frees_row = 0
         for i in range(10):
-            if self.board[row][i] == (None or '.'):
+            if self.board[row][i] == (None):
                 n_frees_row += 1
+        print("SAIU ROWS")
         return n_frees_row
 
     def isInvalidBoard(self):
@@ -708,7 +712,7 @@ class Board:
         for i in range(10):
             if (self.rows[i] < 0) or (self.cols[i] < 0):
                 return True -> check if is not necessary"""
-
+        print("ENTROU INVALID BOARD")
         if self.free_spaces < self.boats[0]:
             return True
 
@@ -716,8 +720,11 @@ class Board:
             return True
 
         for i in range(10):
+            print("ENTROU AQUI")
             if (self.rows[i] > self.get_nfrees_row(i)) or (self.cols[i] > self.get_nfrees_col(i)):
+                print("SAIU AQUI")
                 return True
+        return False
 
         # TODO complete
 
@@ -735,6 +742,10 @@ class Bimaru(Problem):
         # TODO -> se houver hints por explorar, vemos as hints
         # return [(row,col,size,ishorizontal:true)]
         board = state.board
+
+        if board.isInvalidBoard():
+            print("SAIU")
+            return []
         # id = state.id
         # print(state)
     #    print(board)
